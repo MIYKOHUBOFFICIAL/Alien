@@ -14,7 +14,6 @@ end
 
 function ALIENUI:CreateWindow(Config)
     local Window = {}
-    -- Cambio de color dinámico según el fondo
     local ThemeColor = Config.SelectBackground == "Meguna" and Color3.fromRGB(255, 60, 60) or Color3.fromRGB(255, 105, 180)
     
     local ScreenGui = Instance.new("ScreenGui")
@@ -22,7 +21,6 @@ function ALIENUI:CreateWindow(Config)
     ScreenGui.Parent = CoreGui
     ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
-    -- [ TOGGLE BUTTON ARRASTRABLE ]
     local ToggleBtn = Instance.new("TextButton")
     ToggleBtn.Size = UDim2.new(0, 45, 0, 45)
     ToggleBtn.Position = UDim2.new(0, 20, 0, 20)
@@ -54,10 +52,9 @@ function ALIENUI:CreateWindow(Config)
     end
     MakeDraggable(ToggleBtn)
 
-    -- [ MAIN FRAME ]
     local MainFrame = Instance.new("Frame")
-    MainFrame.Size = Config.Size or UDim2.fromOffset(450, 320)
-    MainFrame.Position = UDim2.new(0.5, -225, 0.5, -160)
+    MainFrame.Size = UDim2.fromOffset(450, 320) -- Tamaño inicial arreglado
+    MainFrame.Position = UDim2.new(0.5, -225, 0.5, -160) -- Centrado perfecto
     MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
     MainFrame.ClipsDescendants = true
     MainFrame.Parent = ScreenGui
@@ -78,9 +75,8 @@ function ALIENUI:CreateWindow(Config)
     TitleLabel.TextSize = 14
     TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-    -- [ CUADRO DE RESIZE ELEGANTE ]
     local ResizeHandle = Instance.new("Frame", MainFrame)
-    ResizeHandle.Size = UDim2.new(0, 10, 0, 10)
+    ResizeHandle.Size = UDim2.new(0, 12, 0, 12)
     ResizeHandle.Position = UDim2.new(1, -12, 1, -12)
     ResizeHandle.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
     ResizeHandle.ZIndex = 10
@@ -97,14 +93,14 @@ function ALIENUI:CreateWindow(Config)
         UserInputService.InputChanged:Connect(function(i)
             if resizing and i.UserInputType == Enum.UserInputType.MouseMovement then
                 local delta = i.Position - inputPos
-                target.Size = UDim2.new(0, math.max(350, startSize.X.Offset + delta.X), 0, math.max(250, startSize.Y.Offset + delta.Y))
+                -- Limites de redimensionado para evitar que se rompa
+                target.Size = UDim2.new(0, math.clamp(startSize.X.Offset + delta.X, 300, 800), 0, math.clamp(startSize.Y.Offset + delta.Y, 200, 600))
             end
         end)
         UserInputService.InputEnded:Connect(function() resizing = false; TweenService:Create(handle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(80, 80, 80)}):Play() end)
     end
     SetupResize(ResizeHandle, MainFrame)
 
-    -- [ BACKGROUNDS ANIMADOS ]
     local Background = Instance.new("ImageLabel", MainFrame)
     Background.Size = UDim2.new(1, 0, 1, 0)
     Background.BackgroundTransparency = 1
@@ -152,22 +148,7 @@ function ALIENUI:CreateWindow(Config)
     ContentArea.Position = UDim2.new(0, (Config.SideBarWidth or 130) + 5, 0, 40)
     ContentArea.BackgroundTransparency = 1
 
-    local function MainDrag(gui)
-        local dragToggle, dragStart, startPos
-        TopBar.InputBegan:Connect(function(input)
-            if input.UserInputType == Enum.UserInputType.MouseButton1 then
-                dragToggle = true; dragStart = input.Position; startPos = gui.Position
-            end
-        end)
-        UserInputService.InputChanged:Connect(function(input)
-            if dragToggle and input.UserInputType == Enum.UserInputType.MouseMovement then
-                local delta = input.Position - dragStart
-                gui.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-            end
-        end)
-        UserInputService.InputEnded:Connect(function() dragToggle = false end)
-    end
-    MainDrag(MainFrame)
+    MakeDraggable(MainFrame) -- Permitir mover la UI desde la barra superior
 
     ToggleBtn.MouseButton1Click:Connect(function() MainFrame.Visible = not MainFrame.Visible end)
 
