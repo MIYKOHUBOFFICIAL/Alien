@@ -43,7 +43,7 @@ function ALIENUI:CreateWindow(Config)
     ToggleBtn.Parent = ScreenGui
 
     local MainFrame = Instance.new("Frame")
-    MainFrame.Size = Config.Size or UDim2.fromOffset(580, 460)
+    MainFrame.Size = Config.Size or UDim2.fromOffset(450, 350)
     MainFrame.Position = UDim2.new(0.5, -MainFrame.Size.X.Offset/2, 0.5, -MainFrame.Size.Y.Offset/2)
     MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
     MainFrame.ClipsDescendants = true
@@ -87,7 +87,7 @@ function ALIENUI:CreateWindow(Config)
     end
 
     local Sidebar = Instance.new("Frame", MainFrame)
-    Sidebar.Size = UDim2.new(0, Config.SideBarWidth or 160, 1, 0)
+    Sidebar.Size = UDim2.new(0, Config.SideBarWidth or 130, 1, 0)
     Sidebar.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
     Sidebar.BackgroundTransparency = 0.3
     Sidebar.ZIndex = 1
@@ -102,11 +102,11 @@ function ALIENUI:CreateWindow(Config)
     TitleLabel.Text = Config.Title or "ALIEN"
     TitleLabel.TextColor3 = ThemeColor
     TitleLabel.Font = Enum.Font.GothamBold
-    TitleLabel.TextSize = 18
+    TitleLabel.TextSize = 16
 
     local ContentArea = Instance.new("Frame", MainFrame)
-    ContentArea.Size = UDim2.new(1, -(Config.SideBarWidth or 160), 1, 0)
-    ContentArea.Position = UDim2.new(0, Config.SideBarWidth or 160, 0, 0)
+    ContentArea.Size = UDim2.new(1, -(Config.SideBarWidth or 130), 1, 0)
+    ContentArea.Position = UDim2.new(0, Config.SideBarWidth or 130, 0, 0)
     ContentArea.BackgroundTransparency = 1
     ContentArea.ZIndex = 1
 
@@ -195,7 +195,7 @@ function ALIENUI:CreateWindow(Config)
         TabBtn.Text = opts.Title
         TabBtn.TextColor3 = FirstTab and ThemeColor or Color3.fromRGB(180, 180, 180)
         TabBtn.Font = Enum.Font.GothamSemibold
-        TabBtn.TextSize = 14
+        TabBtn.TextSize = 13
         Instance.new("UICorner", TabBtn).CornerRadius = UDim.new(0, 6)
         local TabContainer = Instance.new("ScrollingFrame", ContentArea)
         TabContainer.Size = UDim2.new(1, -20, 1, -20)
@@ -365,7 +365,7 @@ function ALIENUI:CreateWindow(Config)
         TabBtn.Text = "🔒 " .. opts.Title
         TabBtn.TextColor3 = Color3.fromRGB(100, 100, 100)
         TabBtn.Font = Enum.Font.GothamSemibold
-        TabBtn.TextSize = 14
+        TabBtn.TextSize = 13
         Instance.new("UICorner", TabBtn).CornerRadius = UDim.new(0, 6)
         TabBtn.MouseButton1Click:Connect(function()
             TweenService:Create(TabBtn, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, true), {Size = UDim2.new(0.85, 0, 0, 33)}):Play()
